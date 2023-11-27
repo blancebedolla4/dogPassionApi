@@ -1,4 +1,4 @@
-// ErrorDetail.java
+
 package com.dog.dogapi.error;
 
 import java.util.HashMap;

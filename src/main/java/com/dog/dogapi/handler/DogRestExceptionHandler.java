@@ -6,8 +6,6 @@ import com.dog.dogapi.error.ValidationError;
 import com.dog.dogapi.exceptions.DogNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +14,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @ControllerAdvice
 public class DogRestExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @Autowired
-    private MessageSource messageSource;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DogRestExceptionHandler.class);
 
@@ -43,7 +38,7 @@ public class DogRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
     }
 
-  @Override
+
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         LOGGER.error("Message Not Readable", ex);
         ErrorDetail errorDetail = new ErrorDetail();
@@ -56,7 +51,7 @@ public class DogRestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorDetail, headers, status, request);
     }
 
-    @Override
+
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException manve, HttpHeaders headers, HttpStatus status, WebRequest request) {
         LOGGER.error("Method Argument Not Valid", manve);
         ErrorDetail errorDetail = new ErrorDetail();
@@ -82,4 +77,3 @@ public class DogRestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(manve, errorDetail, headers, status, request);
     }
 }
-

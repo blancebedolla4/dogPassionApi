@@ -12,6 +12,11 @@ public class Breed {
     @Column(name = "BREED_NAME")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "DOG_ID")
+    private Dog dog;
+
+
     public Long getId() {
         return id;
     }

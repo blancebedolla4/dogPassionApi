@@ -12,6 +12,10 @@ import java.util.Optional;
 public class DogService {
     @Autowired
     private DogRepository dogRepository;
+
+    public Dog createDog(Dog dog) {
+        return dogRepository.save(dog);
+    }
     public Iterable<Dog> getAllDogs() {
         return dogRepository.findAll();
     }
@@ -19,9 +23,6 @@ public class DogService {
         return dogRepository.findById(id);
     }
 
-    public Dog createDog(Dog dog) {
-        return dogRepository.save(dog);
-    }
     public void deleteDogById(Long id) {
         dogRepository.deleteById(id);
     }

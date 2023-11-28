@@ -2,6 +2,8 @@ package com.dog.dogapi.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Dog {
     @Id
@@ -12,9 +14,12 @@ public class Dog {
     @Column(name = "DOG_NAME")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "BREED_ID")
     private Breed breed;
+
+    @OneToMany(mappedBy = "dog")
+    private List<Breed> breeds;
 
     public Long getId() {
         return id;

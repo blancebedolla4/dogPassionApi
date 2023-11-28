@@ -11,17 +11,25 @@ import java.util.Optional;
 public class BreedService {
     @Autowired
     private BreedRepository breedRepository;
-    public Iterable<Breed> getAllBreeds() {
-        return breedRepository.findAll();
-    }
-    public Optional<Breed> getBreedById(Long id) {
-        return breedRepository.findById(id);
-    }
+    //create breeds
     public Breed createBreed(Breed breed) {
         return breedRepository.save(breed);
     }
+    //get all breeds
+    public Iterable<Breed> getAllBreeds() {
+        return breedRepository.findAll();
+    }
+    //get breed by id
+    public Optional<Breed> getBreedById(Long id) {
+        return breedRepository.findById(id);
+    }
+    //delete breed by id
     public void deleteBreedById(Long id) {
         breedRepository.deleteById(id);
+    }
+    public Iterable<Breed> getBreedsByDogId(Long dogId) {
+
+        return breedRepository.findByDogId(dogId);
     }
 }
 

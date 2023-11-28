@@ -1,12 +1,12 @@
 package com.dog.dogapi.repository;
 
-import com.dog.dogapi.model.Breed;
+import com.dog.dogapi.model.Reservation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface BreedRepository extends CrudRepository<Breed, Long> {
-    List<Breed> findByDogId(Long dogId);
+public interface ReservationRepository extends CrudRepository<Reservation, Long> {
+    List<Reservation> findByDog_Id(Long dogId);
 }

@@ -1,3 +1,60 @@
+//package com.dog.dogapi.model;
+//
+//import jakarta.persistence.*;
+//import java.time.LocalDateTime;
+//
+//@Entity
+//public class Reservation {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "dog_id", nullable = false)
+//    private Dog dog;
+//
+//    @Column(nullable = false)
+//    private LocalDateTime checkInTime;
+//
+//    @Column(nullable = false)
+//    private LocalDateTime checkOutTime;
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public Dog getDog() {
+//        return dog;
+//    }
+//
+//    public void setDog(Dog dog) {
+//        this.dog = dog;
+//    }
+//
+//    public LocalDateTime getCheckInTime() {
+//        return checkInTime;
+//    }
+//
+//    public void setCheckInTime(LocalDateTime checkInTime) {
+//        this.checkInTime = checkInTime;
+//    }
+//
+//    public LocalDateTime getCheckOutTime() {
+//        return checkOutTime;
+//    }
+//
+//    public void setCheckOutTime(LocalDateTime checkOutTime) {
+//        this.checkOutTime = checkOutTime;
+//    }
+//
+//    public Reservation() {
+//    }
+//}
+
 package com.dog.dogapi.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;

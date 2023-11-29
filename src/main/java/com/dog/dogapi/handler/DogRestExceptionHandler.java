@@ -1,10 +1,10 @@
 package com.dog.dogapi.handler;
 
 
-//import com.dog.dogapi.error.ErrorDetail;
-//import com.dog.dogapi.error.ValidationError;
-//import com.dog.dogapi.exceptions.DogNotFoundException;
-//import org.slf4j.Logger;
+import com.dog.dogapi.error.ErrorDetail;
+import com.dog.dogapi.error.ValidationError;
+import com.dog.dogapi.exceptions.DogNotFoundException;
+import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import org.springframework.http.HttpHeaders;
 import com.dog.dogapi.error.ErrorDetail;

@@ -1,3 +1,53 @@
+//package com.dog.dogapi.service;
+//
+//import com.dog.dogapi.model.Dog;
+//import com.dog.dogapi.repository.DogRepository;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//@Service
+//public class DogService {
+//    @Autowired
+//    private DogRepository dogRepository;
+//
+//    public List<Dog> getAllDogs() {
+//        Iterable<Dog> iterableDogs = dogRepository.findAll();
+//        List<Dog> dogs = new ArrayList<>();
+//        iterableDogs.forEach(dogs::add);
+//        return dogs;
+//    }
+//
+//    public Dog getDogById(Long id) {
+//        return dogRepository.findById(id).orElse(null);
+//    }
+//
+//    public Dog createDog(Dog dog) {
+//        // Add validation logic if needed
+//        return dogRepository.save(dog);
+//    }
+//
+//    public Dog updateDog(Long id, Dog updatedDog) {
+//        Dog existingDog = dogRepository.findById(id).orElse(null);
+//        if (existingDog != null) {
+//            // Update properties and save
+//            existingDog.setName(updatedDog.getName());
+//            existingDog.setBreed(updatedDog.getBreed());
+//            existingDog.setAge(updatedDog.getAge());
+//            existingDog.setOwner(updatedDog.getOwner());
+//            // Add validation logic if needed
+//            return dogRepository.save(existingDog);
+//        }
+//        return null;
+//    }
+//
+//    public void deleteDog(Long id) {
+//        dogRepository.deleteById(id);
+//    }
+//}
+
 package com.dog.dogapi.service;
 
 import com.dog.dogapi.model.Dog;

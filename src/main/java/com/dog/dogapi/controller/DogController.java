@@ -1,3 +1,42 @@
+//package com.dog.dogapi.controller;
+//import com.dog.dogapi.model.Dog;
+//import com.dog.dogapi.service.DogService;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+
+//@RestController
+//@RequestMapping("/api/dogs")
+//public class DogController {
+//    @Autowired
+//    private DogService dogService;
+//
+//    @GetMapping
+//    public List<Dog> getAllDogs() {
+//        return dogService.getAllDogs();
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Dog getDogById(@PathVariable Long id) {
+//        return dogService.getDogById(id);
+//    }
+//
+//    @PostMapping
+//    public Dog createDog(@RequestBody Dog dog) {
+//        return dogService.createDog(dog);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public Dog updateDog(@PathVariable Long id, @RequestBody Dog updatedDog) {
+//        return dogService.updateDog(id, updatedDog);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void deleteDog(@PathVariable Long id) {
+//        dogService.deleteDog(id);
+//    }
+//}
 package com.dog.dogapi.controller;
 
 import com.dog.dogapi.exceptions.DogNotFoundException;
@@ -8,24 +47,23 @@ import com.dog.dogapi.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/dogs")
 @ControllerAdvice
 public class DogController {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DogController.class);
+
     @Autowired
     private DogService dogService;
 
@@ -37,17 +75,6 @@ public class DogController {
         return dogService.getAllDogs();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Dog> getDogById(@PathVariable @Valid Long id) {
-        try {
-            Dog dog = dogService.getDogById(id);
-            return ResponseEntity.ok(dog);
-        } catch (DogNotFoundException e) {
-            LOGGER.error("Dog not found with ID: {}", id, e);
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping
     public ResponseEntity<Dog> createDog(@Valid @RequestBody Dog dog) {
         Dog createdDog = dogService.createDog(dog);
@@ -57,6 +84,17 @@ public class DogController {
                 .buildAndExpand(createdDog.getId())
                 .toUri();
         return ResponseEntity.created(location).body(createdDog);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
+        try {
+            Dog dog = dogService.getDogById(id);
+            return ResponseEntity.ok(dog);
+        } catch (DogNotFoundException e) {
+            LOGGER.error("Dog not found with ID: {}", id, e);
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -78,17 +116,16 @@ public class DogController {
         return ResponseEntity.noContent().build();
     }
 
-
     @GetMapping("/{id}/reservations")
     public ResponseEntity<List<Reservation>> getReservationsByDogId(@PathVariable Long id) {
         List<Reservation> reservations = dogService.getReservationsByDogId(id);
-        return new ResponseEntity<>(reservations, HttpStatus.OK);
+        return ResponseEntity.ok(reservations);
     }
 
     @PostMapping("/{id}/reservations")
     public ResponseEntity<Reservation> addReservation(@PathVariable Long id, @Valid @RequestBody Reservation reservation) {
-        Reservation addedReservation = reservationService.addReservation(id, reservation);
-        return new ResponseEntity<>(addedReservation, HttpStatus.CREATED);
+        Reservation addedReservation = reservationService.createReservation(id, reservation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedReservation);
     }
 
     @GetMapping("/search")
@@ -103,14 +140,7 @@ public class DogController {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             LOGGER.error("Error occurred during dog search", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }
-
-
-
-
-
-

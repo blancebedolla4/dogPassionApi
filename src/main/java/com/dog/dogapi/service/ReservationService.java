@@ -1,8 +1,11 @@
 package com.dog.dogapi.service;
 
+import com.dog.dogapi.exceptions.ReservationNotFoundException;
 import com.dog.dogapi.model.Dog;
 import com.dog.dogapi.model.Reservation;
 import com.dog.dogapi.repository.ReservationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import java.util.List;
 
 @Service
 public class ReservationService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
     @Autowired
     private ReservationRepository reservationRepository;
 
@@ -39,13 +43,15 @@ public class ReservationService {
 
 
     public Reservation updateReservation(Long id, Reservation updatedReservation) {
-        Reservation existingReservation = reservationRepository.findById(id).orElse(null);
+        LOGGER.info("Updating reservation with ID: {}", id);
+        Reservation existingReservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
         if (existingReservation != null) {
             existingReservation.setCheckInTime(updatedReservation.getCheckInTime());
             existingReservation.setCheckOutTime(updatedReservation.getCheckOutTime());
             return reservationRepository.save(existingReservation);
         }
-        return null;
+        return reservationRepository.save(existingReservation);
     }
 
     public void deleteReservation(Long id) {

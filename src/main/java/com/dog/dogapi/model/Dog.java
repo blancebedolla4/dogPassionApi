@@ -1,27 +1,49 @@
 package com.dog.dogapi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Dog {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Dog.class);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
+
     @NotBlank
     @Column(nullable = false)
     private String name;
+
     @NotBlank
     @Column(nullable = false)
     private String breed;
 
     @Column(nullable = false)
     private Integer age;
+
     @NotBlank
     @Column(nullable = false)
     private String owner;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
     public Long getId() {
         return id;
@@ -37,6 +59,7 @@ public class Dog {
 
     public void setName(String name) {
         this.name = name;
+        LOGGER.info("Name set to: {}", name);
     }
 
     public String getBreed() {
@@ -45,9 +68,8 @@ public class Dog {
 
     public void setBreed(String breed) {
         this.breed = breed;
+        LOGGER.info("Breed set to: {}", breed);
     }
-
-
 
     public String getOwner() {
         return owner;
@@ -55,6 +77,7 @@ public class Dog {
 
     public void setOwner(String owner) {
         this.owner = owner;
+        LOGGER.info("Owner set to: {}", owner);
     }
 
     public Integer getAge() {
@@ -63,62 +86,9 @@ public class Dog {
 
     public void setAge(Integer age) {
         this.age = age;
+        LOGGER.info("Age set to: {}", age);
     }
 
     public Dog() {
     }
-
-    public void setAge(int age) {
-        this.age = age;
-        // Add logging here to print the value of age
-        System.out.println("Age set to: " + age);
-    }
 }
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "DOG_ID")
-//    private Long id;
-//
-//    @Column(name = "DOG_NAME")
-//    private String name;
-//
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "BREED_ID")
-//    private Reservation breed;
-//
-//    @OneToMany(mappedBy = "dog")
-//    private List<Reservation> breeds;
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public Reservation getBreed() {
-//        return breed;
-//    }
-//
-//    public void setBreed(Reservation breed) {
-//        this.breed = breed;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Dog{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", breed=" + breed +
-//                '}';
-//    }
-//}

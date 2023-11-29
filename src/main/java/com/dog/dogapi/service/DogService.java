@@ -4,6 +4,8 @@ import com.dog.dogapi.model.Dog;
 import com.dog.dogapi.model.Reservation;
 import com.dog.dogapi.repository.DogRepository;
 import com.dog.dogapi.repository.ReservationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.Optional;
 
 @Service
 public class DogService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DogService.class);
+
     @Autowired
     private DogRepository dogRepository;
     @Autowired
@@ -34,6 +38,7 @@ public class DogService {
 
     public Dog updateDog(Long id, Dog updatedDog) {
         Dog existingDog = dogRepository.findById(id).orElse(null);
+        LOGGER.info("Updating dog with ID: {}", id);
         if (existingDog != null) {
             // Update properties and save
             existingDog.setName(updatedDog.getName());
@@ -55,28 +60,26 @@ public class DogService {
         // Implement logic to retrieve reservations by dog ID from the repository
         return reservationRepository.findByDog_Id(dogId);
     }
+    public List<Dog> searchDogs(String name, String breed) {
+        LOGGER.info("Searching dogs with name: {} and breed: {}", name, breed);
+
+        if (name != null && breed != null) {
+            // Search by both name and breed
+            return dogRepository.findByNameAndBreed(name, breed);
+        } else if (name != null) {
+            // Search by name
+            return dogRepository.findByName(name);
+        } else if (breed != null) {
+            // Search by breed
+            return dogRepository.findByBreed(breed);
+        } else {
+            // No search criteria provided, return all dogs
+            return getAllDogs();
+        }
+    }
 }
 
 
-
-//    public Dog createDog(Dog dog) {
-//        return dogRepository.save(dog);
-//    }
-//    public Iterable<Dog> getAllDogs() {
-//        return dogRepository.findAll();
-//    }
-//    public Optional<Dog> getDogById(Long id) {
-//        return dogRepository.findById(id);
-//    }
-//
-//    public void deleteDogById(Long id) {
-//        dogRepository.deleteById(id);
-//    }
-
-//    public List<Dog> searchDogsByName(String name) {
-//        // Implement a search method in the repository
-//        return dogRepository.findByNameContainingIgnoreCase(name);
-//    }
 
 
 

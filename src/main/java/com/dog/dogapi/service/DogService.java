@@ -50,6 +50,7 @@
 
 package com.dog.dogapi.service;
 
+import com.dog.dogapi.exceptions.DogNotFoundException;
 import com.dog.dogapi.model.Dog;
 import com.dog.dogapi.model.Reservation;
 import com.dog.dogapi.repository.DogRepository;
@@ -79,7 +80,11 @@ public class DogService {
     }
 
     public Dog getDogById(Long id) {
-        return dogRepository.findById(id).orElse(null);
+        Optional<Dog> optionalDog =dogRepository.findById(id);
+        if(optionalDog.isEmpty()){
+            throw new DogNotFoundException("Dog doesnt exist");
+        }
+        return optionalDog.get();
     }
 
     public Dog createDog(Dog dog) {
@@ -87,9 +92,8 @@ public class DogService {
     }
 
     public Dog updateDog(Long id, Dog updatedDog) {
-        Dog existingDog = dogRepository.findById(id).orElse(null);
+        Dog existingDog = getDogById(id);
         LOGGER.info("Updating dog with ID: {}", id);
-        if (existingDog != null) {
             // Update properties and save
             existingDog.setName(updatedDog.getName());
             existingDog.setBreed(updatedDog.getBreed());
@@ -98,17 +102,16 @@ public class DogService {
             // Add validation logic if needed
             return dogRepository.save(existingDog);
         }
-        return null;
-    }
 
     public void deleteDog(Long id) {
-        dogRepository.deleteById(id);
+        dogRepository.delete(getDogById(id));
     }
 
 
     public List<Reservation> getReservationsByDogId(Long dogId) {
         // Implement logic to retrieve reservations by dog ID from the repository
-        return reservationRepository.findByDog_Id(dogId);
+        Dog dog = getDogById(dogId);
+        return reservationRepository.findByDog_Id(dog.getId());
     }
     public List<Dog> searchDogs(String name, String breed) {
         LOGGER.info("Searching dogs with name: {} and breed: {}", name, breed);

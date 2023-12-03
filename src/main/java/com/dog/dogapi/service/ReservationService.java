@@ -1,4 +1,5 @@
 package com.dog.dogapi.service;
+import com.dog.dogapi.dto.ReservationRequest;
 import com.dog.dogapi.model.Dog;
 import com.dog.dogapi.model.Reservation;
 import com.dog.dogapi.repository.ReservationRepository;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -17,6 +18,9 @@ public class ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private DogService dogService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
 
 
@@ -24,10 +28,12 @@ public class ReservationService {
         return reservationRepository.findByDog_Id(dogId);
     }
 
-    public Reservation createReservation(Long dogId, Reservation reservation) {
-        Dog dog = new Dog();
-        dog.setId(dogId);
+    public Reservation createReservation(Long dogId, ReservationRequest reservationRequest) {
+        Dog dog= dogService.getDogById(dogId);
+        Reservation reservation = new Reservation();
         reservation.setDog(dog);
+        reservation.setCheckInTime(reservationRequest.getCheckInTime());
+        reservation.setCheckOutTime(reservationRequest.getCheckOutTime());
         return reservationRepository.save(reservation);
     }
 

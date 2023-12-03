@@ -88,27 +88,17 @@ public class DogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
-        try {
             Dog dog = dogService.getDogById(id);
             return ResponseEntity.ok(dog);
-        } catch (DogNotFoundException e) {
-            LOGGER.error("Dog not found with ID: {}", id, e);
-            return ResponseEntity.notFound().build();
-        }
+
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Dog> updateDog(@PathVariable Long id, @Valid @RequestBody Dog updatedDog) {
-        try {
-            Dog updated = dogService.updateDog(id, updatedDog);
-            return updated != null ?
-                    ResponseEntity.ok(updated) :
-                    ResponseEntity.notFound().build();
-        } catch (DogNotFoundException e) {
-            LOGGER.error("Dog not found with ID: {}", id, e);
-            return ResponseEntity.notFound().build();
+        Dog dog = dogService.getDogById(id);
+            return ResponseEntity.ok(dog);
         }
-    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDog(@PathVariable Long id) {
@@ -122,11 +112,11 @@ public class DogController {
         return ResponseEntity.ok(reservations);
     }
 
-    @PostMapping("/{id}/reservations")
-    public ResponseEntity<Reservation> addReservation(@PathVariable Long id, @Valid @RequestBody Reservation reservation) {
-        Reservation addedReservation = reservationService.createReservation(id, reservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addedReservation);
-    }
+//    @PostMapping("/{id}/reservations")
+//    public ResponseEntity<Reservation> addReservation(@PathVariable Long id, @Valid @RequestBody Reservation reservation) {
+//        Reservation addedReservation = reservationService.createReservation(id, reservation);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(addedReservation);
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Dog>> searchDogs(@RequestParam(name = "name", required = false) String name,

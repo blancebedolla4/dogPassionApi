@@ -1,6 +1,4 @@
-
 package com.dog.dogapi.controller;
-
 
 import com.dog.dogapi.dto.ReservationRequest;
 import com.dog.dogapi.dto.ReservationResponse;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,53 +25,48 @@ public class ReservationController {
      * @param dogId The ID of the dog.
      * @return A ResponseEntity containing the list of reservations.
      */
-    @GetMapping("/dog/{dogId}")
-    public ResponseEntity<List<Reservation>> getReservationsByDogId(@PathVariable Long dogId) {
-        List<Reservation> reservations = reservationService.getReservationsByDogId(dogId);
-        return ResponseEntity.ok(reservations);
-    }
+//    @GetMapping("/dog/{dogId}")
+//    public ResponseEntity<List<Reservation>> getReservationsByDogId(@PathVariable Long dogId) {
+//        List<Reservation> reservations = reservationService.getReservationsByDogId(dogId);
+//        return ResponseEntity.ok(reservations);
+//    }
 
     /**
      * Add a reservation for a specific dog.
      *
-     * @param id                  The ID of the dog.
+     * @param dogId                  The ID of the dog.
      * @param reservationRequest The request body containing reservation details.
      * @return A ResponseEntity containing the created reservation.
      */
-    @PostMapping("/{id}/reservations")
+    @PostMapping("/dogs/{dogId}") //change postman
     public ResponseEntity<ReservationResponse> addReservation(
-            @PathVariable Long id,
+            @PathVariable Long dogId,
             @RequestBody @Valid ReservationRequest reservationRequest) {
 
-        try {
-            Reservation addedReservation = reservationService.createReservation(id, new Reservation());
+
+            Reservation addedReservation = reservationService.createReservation(dogId, reservationRequest);
 
             ReservationResponse response = new ReservationResponse(
                     addedReservation.getId(),
                     addedReservation.getDog().getId(),
                     addedReservation.getCheckInTime(),
                     addedReservation.getCheckOutTime()
-                    // Map additional reservation details...
             );
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (DogNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
     }
 
     /**
      * Update a reservation by ID.
      *
-     * @param id                The ID of the reservation to be updated.
+     * @param reservationId               The ID of the reservation to be updated.
      * @param updatedReservation The updated reservation details.
      * @return A ResponseEntity containing the updated reservation.
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody Reservation updatedReservation) {
-        Reservation updated = reservationService.updateReservation(id, updatedReservation);
+    @PutMapping("/{reservationId}")
+    public ResponseEntity<Reservation> updateReservation(@PathVariable Long reservationId, @RequestBody Reservation updatedReservation) {
+        Reservation updated = reservationService.updateReservation(reservationId, updatedReservation);
         return updated != null ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.notFound().build();
@@ -96,17 +88,18 @@ public class ReservationController {
     /**
      * Delete a reservation by ID.
      *
-     * @param id The ID of the reservation to be deleted.
+     * @param reservationId The ID of the reservation to be deleted.
      * @return A ResponseEntity indicating the success of the deletion.
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
         try {
-            reservationService.deleteReservation(id);
+            reservationService.deleteReservation(reservationId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            // Log the exception and handle it appropriately
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    //getReservation by id ?
 }
